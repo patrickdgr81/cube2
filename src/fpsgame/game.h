@@ -92,7 +92,7 @@ enum
     M_SLOWMO     = 1<<18,
     M_COLLECT    = 1<<19
 };
-
+extern FILE *accuracyTest;
 static struct gamemodeinfo
 {
     const char *name;

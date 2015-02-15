@@ -747,6 +747,7 @@ namespace game
 
     void shoot(fpsent *d, const vec &targ)
     {
+      // fprintf(accuracyTest, "Shot fired!\n");
         int prevaction = d->lastaction, attacktime = lastmillis-prevaction;
         if(attacktime<d->gunwait) return;
         d->gunwait = 0;

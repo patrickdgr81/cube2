@@ -540,6 +540,11 @@ namespace game
 
     void startgame()
     {
+        accuracyTest = fopen("test.txt","w");
+        if (accuracyTest == NULL) {
+	  printf("Error opening file !\n");
+	  exit(1);
+	}
         clearmovables();
         clearmonsters();
 

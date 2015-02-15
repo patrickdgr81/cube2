@@ -1,9 +1,6 @@
 #include "game.h"
-#include <iostream>
-#include <fstream>
-using namespace std;
 
-extern ofstream myfile;
+FILE *accuracyTest = NULL;
 namespace game
 {
     void parseoptions(vector<const char *> &args)
@@ -782,7 +779,7 @@ namespace server
 
     void serverinit()
     {
-        myfile.open ("thisIsTest1.txt");
+      //myfile.open ("thisIsTest1.txt");
         smapname[0] = '\0';
         resetitems();
     }
@@ -2238,7 +2235,7 @@ namespace server
 
     void shotevent::process(clientinfo *ci)
     {
-        gamestate &gs = ci->state;
+	gamestate &gs = ci->state;
         int wait = millis - gs.lastshot;
         if(!gs.isalive(gamemillis) ||
            wait<gs.gunwait ||
@@ -2252,9 +2249,10 @@ namespace server
                 int(from.x*DMF), int(from.y*DMF), int(from.z*DMF),
                 int(to.x*DMF), int(to.y*DMF), int(to.z*DMF),
                 ci->ownernum);
-        gs.shotdamage += guns[gun].damage*(gs.quadmillis ? 4 : 1)*guns[gun].rays;
-        conoutf("did some damage!");
-        switch(gun)
+        int shotDamage = guns[gun].damage*(gs.quadmillis ? 4 : 1)*guns[gun].rays;
+	gs.shotdamage += shotDamage;
+	conoutf("Damage Delt: %d\n", shotDamage);
+	switch(gun)
         {
             case GUN_RL: gs.rockets.add(id); break;
             case GUN_GL: gs.grenades.add(id); break;
@@ -2270,6 +2268,7 @@ namespace server
                     totalrays += h.rays;
                     if(totalrays>maxrays) continue;
                     int damage = h.rays*guns[gun].damage;
+		    fprintf(accuracyTest, "Damage Delt: %d\n", damage);
                     if(gs.quadmillis) damage *= 4;
                     dodamage(target, ci, damage, gun, h.dir);
                 }
