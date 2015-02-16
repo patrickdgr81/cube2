@@ -93,6 +93,7 @@ enum
     M_COLLECT    = 1<<19
 };
 extern FILE *accuracyTest;
+extern FILE *deathTest;
 static struct gamemodeinfo
 {
     const char *name;

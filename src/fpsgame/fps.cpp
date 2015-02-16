@@ -540,8 +540,9 @@ namespace game
 
     void startgame()
     {
-        accuracyTest = fopen("test.txt","w");
-        if (accuracyTest == NULL) {
+        accuracyTest = fopen("accuracyTest.txt","w");
+	deathTest = fopen("deathTest.txt","w");
+        if ((accuracyTest == NULL)||deathTest == NULL) {
 	  printf("Error opening file !\n");
 	  exit(1);
 	}

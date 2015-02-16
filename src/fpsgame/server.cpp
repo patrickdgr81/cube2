@@ -1,6 +1,7 @@
 #include "game.h"
 
 FILE *accuracyTest = NULL;
+FILE *deathTest = NULL;
 namespace game
 {
     void parseoptions(vector<const char *> &args)
@@ -2148,7 +2149,11 @@ namespace server
         }
         if(ts.health<=0)
         {
-            target->state.deaths++;
+	    char* playerName = target->name;
+	    if (strcmp(playerName,"bot") != 0) {
+	      fprintf(deathTest, "Player %s died!\n", playerName);
+	    }
+	    target->state.deaths++;
             int fragvalue = smode ? smode->fragvalue(target, actor) : (target==actor || isteam(target->team, actor->team) ? -1 : 1);
             actor->state.frags += fragvalue;
             if(fragvalue>0)
@@ -2251,7 +2256,11 @@ namespace server
                 ci->ownernum);
         int shotDamage = guns[gun].damage*(gs.quadmillis ? 4 : 1)*guns[gun].rays;
 	gs.shotdamage += shotDamage;
-	conoutf("Damage Delt: %d\n", shotDamage);
+	char* playerName = ci->name;
+	
+	if (strcmp(playerName,"bot") != 0) {
+	   fprintf(accuracyTest, "Player %s fired!\n", playerName);
+	}
 	switch(gun)
         {
             case GUN_RL: gs.rockets.add(id); break;
@@ -2268,7 +2277,10 @@ namespace server
                     totalrays += h.rays;
                     if(totalrays>maxrays) continue;
                     int damage = h.rays*guns[gun].damage;
-		    fprintf(accuracyTest, "Damage Delt: %d\n", damage);
+		    if (strcmp(playerName,"bot") != 0) {
+		      fprintf(accuracyTest, "Player %s fired!, did %d damage\n", playerName, damage);
+		    }
+		   
                     if(gs.quadmillis) damage *= 4;
                     dodamage(target, ci, damage, gun, h.dir);
                 }
